@@ -78,22 +78,22 @@ router.put('/:id', (req, res) => {
     const { id } = req.params;
   
 	db('accounts').where({ id }).update(req.body)
-	.then((count) => {
-      if (count) {
-        res.json({ 
-			message: `The account was updated successfully.` 
+		.then((count) => {
+			if (count) {
+			  res.json({
+					message: `The account was updated successfully.`
+			})
+			} else {
+			  res.status(404).json({
+					message: 'The account with the specified id does not exist.'
+			})
+		}})
+		.catch((error) => {
+			console.log(error)
+			res.status(500).json({
+				errorMessage: 'The account could not be updated.'
+			})
 		})
-      } else {
-        res.status(404).json({ 
-			message: 'The account with the specified id does not exist.' 
-		})
-    }})
-    .catch((error) => {
-		console.log(error)
-		res.status(500).json({ 
-			errorMessage: 'The account could not be updated.' 
-		})
-    })
 })
 
 // Deletes an account with the given id
@@ -102,14 +102,14 @@ router.delete('/:id', (req, res) => {
     const { id } = req.params;
   
     db('accounts').where({ id }).del()
-	.then((count) => {
-		if (count > 0) {
-			res.status(200).json({
-				message: 'The account has been removed',
+		.then((count) => {
+			if (count > 0) {
+				res.status(200).json({
+					message: 'The account has been removed',
 			})
-		} else {
-			res.status(404).json({
-				message: 'The account with the specified ID does not exist.'
+			} else {
+				res.status(404).json({
+					message: 'The account with the specified id does not exist.'
 			})
 		}
 	})
