@@ -65,4 +65,36 @@ router.post('/', (req, res) => {
 		})
 })
 
+// Update an account with the given id
+router.put('/:id', (req, res) => {
+  
+	// If the following fields are not completed then the account can't be updated
+	if (!req.body.name || !req.body.budget) {
+		return res.status(400).json({
+			errorMessage: 'Please provide name and budget for the account.'
+		})
+	}
+
+    const { id } = req.params;
+  
+	db('accounts').where({ id }).update(req.body)
+	.then((count) => {
+      if (count) {
+        res.json({ 
+			message: `The account was updated successfully.` 
+		})
+      } else {
+        res.status(404).json({ 
+			message: 'The account with the specified id does not exist.' 
+		})
+    }})
+    .catch((error) => {
+		console.log(error)
+		res.status(500).json({ 
+			errorMessage: 'The account could not be updated.' 
+		})
+    })
+})
+
+
 module.exports = router;
