@@ -46,8 +46,8 @@ router.post('/', (req, res) => {
 	// If the following fields are not completed then no account will be created
 	if (!req.body.name || !req.body.budget) {
 		return res.status(400).json({
-			errorMessage: 'Please provide name and budget for the account.'
-		})
+					errorMessage: 'Please provide name and budget for the account.'
+				})
 	}
 
 	db('accounts').insert(req.body)
@@ -71,23 +71,24 @@ router.put('/:id', (req, res) => {
 	// If the following fields are not completed then the account can't be updated
 	if (!req.body.name || !req.body.budget) {
 		return res.status(400).json({
-			errorMessage: 'Please provide name and budget for the account.'
-		})
+					errorMessage: 'Please provide name and budget for the account.'
+				})
 	}
 
-    const { id } = req.params;
+	const { id } = req.params;
   
 	db('accounts').where({ id }).update(req.body)
 		.then((count) => {
 			if (count) {
-			  res.json({
+			  	res.json({
 					message: `The account was updated successfully.`
-			})
+				})
 			} else {
-			  res.status(404).json({
+			  	res.status(404).json({
 					message: 'The account with the specified id does not exist.'
-			})
-		}})
+				})
+			}
+		})
 		.catch((error) => {
 			console.log(error)
 			res.status(500).json({
@@ -106,12 +107,12 @@ router.delete('/:id', (req, res) => {
 			if (count > 0) {
 				res.status(200).json({
 					message: 'The account has been removed',
-			})
+				})
 			} else {
 				res.status(404).json({
 					message: 'The account with the specified id does not exist.'
-			})
-		}
+				})
+			}
 	})
 	.catch((error) => {
 		console.log(error)
