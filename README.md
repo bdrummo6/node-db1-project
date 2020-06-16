@@ -12,7 +12,7 @@ For this lab you will:
 
 - [X] write SQL statements against a pre-populated database using an online tool. Once you have the correct SQL Statement for each query, write
  it inside the `queries.sql` file under the appropriate heading.
-- write API endpoints to manage the `accounts` resource, including database logic
+- [X] write API endpoints to manage the `accounts` resource, including database logic
 
 ### Write Basic Queries
 
@@ -30,8 +30,8 @@ Visit [SQL Try Editor at W3Schools.com](https://www.w3schools.com/Sql/trysql.asp
 
 ### Write Accounts API
 
-- Write CRUD endpoints for the `accounts` resource. Use the `db` object imported from `data/dbConfig.js` for database access via `knex`.
-- Manually test your endpoints with a REST client like `Insomnia` or `Postman` to check they are working as expected.
+- [X] Write CRUD endpoints for the `accounts` resource. Use the `db` object imported from `data/dbConfig.js` for database access via `knex`.
+- [X] Manually test your endpoints with a REST client like `Insomnia` or `Postman` to check they are working as expected.
 
 #### Accounts Schema
 
