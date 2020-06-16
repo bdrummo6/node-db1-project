@@ -5,7 +5,8 @@ const db = require('../data/dbConfig.js');
 
 // Returns All accounts
 router.get('/', (req, res) => {
-	db('accounts')
+	// STRETCH: Add a `query string` option to the `GET /api/accounts` endpoint
+	db('accounts').orderBy('budget', 'desc').limit(7)
 		.then((accounts) => {
 			res.status(200).json(accounts)
 		})
