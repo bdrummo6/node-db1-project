@@ -4,123 +4,68 @@ const router = express.Router();
 const db = require('../data/dbConfig.js');
 
 // Returns All accounts
-router.get('/', (req, res) => {
-	// STRETCH: Add a `query string` option to the `GET /api/accounts` endpoint
-	db('accounts').orderBy('budget', 'desc').limit(7)
-		.then((accounts) => {
-			res.status(200).json(accounts)
-		})
-		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				errorMessage: 'The account information could not be retrieved.'
-			})
-		})
+router.get('/', async (req, res) => {
+	try {
+		// STRETCH: Add a `query string` option to the `GET /api/accounts` endpoint
+		// const accounts  = await db('accounts').orderBy('budget', 'desc').limit(7)
+		const accounts  = await db('accounts')
+		res.json(accounts)
+	} catch (err) {
+		next(err)
+	}	
 })
 
 // Returns an account with the given id
-router.get('/:id', (req, res) => {
-
-	const { id } = req.params;
-
-	db('accounts').where({ id })
-		.then((account) => {
-			if (account) {
-				res.status(200).json(account)
-			} else {
-				res.status(404).json({
-					message: 'The account with the specified id does not exist.'
-				})
-			}
-		})
-		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				errorMessage: 'The account information could not be retrieved.'
-			})
-		})
+router.get('/:id', async (req, res, next) => {
+	try {
+		const account = await db('accounts').where('id', req.params.id).limit(1)
+		res.json(account)
+	} catch (err) {
+		next(err)
+	}
 })
 
 // Creates a new Account
-router.post('/', (req, res) => {
+router.post('/', async (req, res, next) => {
 
-	// If the following fields are not completed then no account will be created
-	if (!req.body.name || !req.body.budget) {
-		return res.status(400).json({
-					errorMessage: 'Please provide name and budget for the account.'
-				})
+	try {
+		const payload = {
+			name: req.body.name,
+			budget: req.body.budget
+		}
+		const [accountID] = await db('accounts').insert(payload)
+		const account = await db.first('*').from('accounts').where('id', accountID)
+
+		res.status(201).json(account)
+	} catch (err) {
+		next(err)
 	}
-
-	db('accounts').insert(req.body)
-		.then((account) => {
-			console.log(account)
-			res.status(200).json({
-				message: 'The account was successfully added.'
-			})
-		})
-		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				errorMessage: 'There was an error in posting the account.'
-			})
-		})
 })
 
 // Update an account with the given id
-router.put('/:id', (req, res) => {
-  
-	// If the following fields are not completed then the account can't be updated
-	if (!req.body.name || !req.body.budget) {
-		return res.status(400).json({
-					errorMessage: 'Please provide name and budget for the account.'
-				})
+router.put('/:id', async (req, res, next) => {
+ 
+	try {
+		const payload = {
+			name: req.body.name,
+			budget: req.body.budget
+		}
+		await db('accounts').update(payload).where('id', req.params.id)
+		const account = await db.first('*').from('accounts').where('id', req.params.id)
+		res.json(account)
+	} catch (err) {
+		next(err)
 	}
-
-	const { id } = req.params;
-  
-	db('accounts').where({ id }).update(req.body)
-		.then((count) => {
-			if (count) {
-			  	res.json({
-					message: `The account was updated successfully.`
-				})
-			} else {
-			  	res.status(404).json({
-					message: 'The account with the specified id does not exist.'
-				})
-			}
-		})
-		.catch((error) => {
-			console.log(error)
-			res.status(500).json({
-				errorMessage: 'The account could not be updated.'
-			})
-		})
 })
 
 // Deletes an account with the given id
-router.delete('/:id', (req, res) => {
-  
-    const { id } = req.params;
-  
-    db('accounts').where({ id }).del()
-		.then((count) => {
-			if (count > 0) {
-				res.status(200).json({
-					message: 'The account has been removed',
-				})
-			} else {
-				res.status(404).json({
-					message: 'The account with the specified id does not exist.'
-				})
-			}
-	})
-	.catch((error) => {
-		console.log(error)
-		res.status(500).json({
-			errorMessage: 'The account could not be removed'
-		})
-	})
+router.delete('/:id', async (req, res, next) => {
+	try {
+		await db('accounts').where('id', req.params.id).del()
+		res.status(204).end()
+	} catch (err) {
+		next(err)
+	}
 })
 
 module.exports = router;
