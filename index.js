@@ -7,5 +7,5 @@ server.get('/', (req, res) => {
 })
 
 server.listen(PORT, () => {
-  console.log(`API running on port ${PORT}`);
+  console.log(`The server is running on port ${PORT}`);
 });
