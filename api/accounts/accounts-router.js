@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../data/dbConfig.js');
+const db = require('../../data/dbConfig.js');
 
 // Returns All accounts
 router.get('/', async (req, res) => {
