@@ -7,8 +7,8 @@ const db = require('../../data/dbConfig.js');
 router.get('/', async (req, res) => {
 	try {
 		// STRETCH: Add a `query string` option to the `GET /api/accounts` endpoint
-		// const accounts  = await db('accounts').orderBy('budget', 'desc').limit(7)
-		const accounts  = await db('accounts')
+		const accounts  = await db('accounts').orderBy('budget', 'desc').limit(7)
+		// const accounts  = await db('accounts')
 		res.json(accounts)
 	} catch (err) {
 		next(err)
@@ -44,7 +44,6 @@ router.post('/', async (req, res, next) => {
 
 // Update an account with the given id
 router.put('/:id', async (req, res, next) => {
- 
 	try {
 		const payload = {
 			name: req.body.name,
